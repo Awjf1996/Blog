@@ -1,0 +1,112 @@
+{% extends 'layout.html' %}
+
+{% block mycontent %}
+<style type="text/css">
+	textarea.form-control{
+		height: 300px;
+	}
+</style>
+<div class="content-wrapper">
+	<section class="content-header">
+	  <h1>
+		博客管理
+		<small>文章管理</small>
+	  </h1>
+
+	</section>
+	<section class="content">
+		<div class="box box-primary">
+			<div class="box-header with-border">
+				<h3 class="box-title">文章发布</h3>
+			</div>
+			<!-- /.box-header -->
+			<!-- form start -->
+			<div>
+				<div class="box-body">
+					<div class="form-group">
+						<label>文章标题</label>
+						<input type="text" class="form-control"  placeholder="请输入标题" value="Slack集成Office365企业生产力工具">
+					</div>
+					<div class="form-group">
+						<label>文章作者</label>
+						<input type="text" class="form-control"  placeholder="请输入作者" value="Yooye">
+					</div>
+
+					<div class="form-group">
+						<label>文章简介</label>
+						<input type="text" class="form-control"  placeholder="请输入简介" value="Slack 收购 Astro 的主要目的之一就是，帮助 Slack 跟微软和谷歌的 生产力工具 进行集成 ...">
+					</div>
+
+					<div class="form-group">
+						<label>海报图片</label>
+						<form action="/admin/upload" class="dropzone">
+							<div class="fallback">
+								<input name="file" type="file" multiple />
+							</div>
+						</form>
+					</div>
+					<div class="form-group">
+						<label>发布时间</label>
+						<div class="input-group date">
+							<div class="input-group-addon">
+								<i class="fa fa-calendar"></i>
+							</div>
+							<input type="text" class="form-control pull-right" id="datepicker">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label>文章内容</label>
+						<textarea name="" class="form-control">在聊天界面中集成企业工具是Slack的目标，这一直是该公司跟那些巨头竞争对手（比如微软和 Facebook）的主要区别。去年，Slack 收购了 Astro，其目标就是为了在 Slack 中集成企业生产力工具。周二，该公司公布了跟微软 OneDrive 和 Outlook 的一系列新集成。
+
+具体来说，Slack 跟微软的日历、文件和通话进行了集成，并引入了跟其他服务的集成，包括 Box、Dropbox 和 Zoom。
+
+通过收购 Astro 的交易，安迪·普夫劳姆（Andy Pflaum）加入了 Slack，并担任项目管理总监一职。他说，Slack 收购 Astro 的主要目的之一就是，帮助 Slack 跟微软和谷歌的生产力工具进行集成。
+
+当我们加入 Slack 时，任务就是要在 Slack 跟微软产品（尤其是 Office 和 Office 365）以及谷歌同类产品（G Suite）之间建立互操作性。我们专注于在 Slack 中实现跟电邮和日历的深度集成，并且引入来自微软、谷歌以及其他领先供应商（比如 Zoom、Box 和 Dropbox）的文件和通话。普夫劳姆告诉 TechCrunch，他曾是 Astro 的联合创始人兼首席执行官。
+
+首先，Slack 宣布跟 Outlook 进行了深度集成，用户将能够在 Slack 中获得活动邀请并作出回应。此外，你还可以一键点击直接从 Slack 加入会议，无论会议是在 Zoom、WebEx，还是在 Skype for Business 举行。更重要的是，当你参加会议时，你在 Slack 的状态会自动更新，省去了手动操作的步骤（很多用户经常忘了更改状态，导致在参加会议时从 Slack 上收到别人的一大堆消息）。
+						</textarea>
+					</div>
+
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer">
+					<button type="button" class="btn btn-primary">确认发布</button>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+<script>
+	var imgurl = '';
+	$('.btn-primary').click(function () {
+	    // alert(1);
+		$.ajax({
+			url:'/admin/pub/add',
+			type:'post',
+			data:{
+                title:$('input').eq(0).val(),
+                author:$('input').eq(1).val(),
+                intro:$('input').eq(2).val(),
+                imgUrl:imgurl,
+				time:$('#datepicker').val(),
+                words:$('textarea').eq(0).val(),
+			},
+			success:function (result) {
+				console.log(result)
+            }
+		})
+    });
+	Dropzone.autoDiscover = false;
+	var myDropzone = new Dropzone('.dropzone');
+	myDropzone.on('success',function (result) {
+		imgurl = result.xhr.responseText
+	});
+
+	$('#datepicker').datepicker({
+		autoclose: true
+	})
+</script>
+{% endblock %}

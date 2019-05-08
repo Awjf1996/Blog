@@ -1,0 +1,146 @@
+{% extends 'layout.html' %}
+{% block mycontent %}
+<style>
+	.sm-img{
+		width: 50px;
+	}
+</style>
+<div class="content-wrapper">
+	<section class="content-header">
+		<h1>
+			博客管理
+			<small>文章管理</small>
+		</h1>
+	</section>
+	<section class="content">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">文章列表</h3>
+			</div>
+			<div class="box-body">
+				<table class="table table-bordered">
+					<!-- 列表标题 -->
+					<thead>
+						<tr>
+							<th >文章ID</th>
+							<th>标题</th>
+							<th>作者</th>
+							<th>时间</th>
+							<th>图片</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<!-- 列表内容区 -->
+					<tbody>
+						{% for item in mylistData %}
+						<tr>
+							<td>{{item._id.toString()}}</td>
+							<td>{{item.title}}</td>
+							<td>{{item.author}}</td>
+							<td>{{item.time}}</td>
+							<td>
+								<img class="sm-img" src="{{item.imgUrl}}" alt="">
+							</td>
+							<td>
+								<button class="btn btn-danger btn-xs" data-id="{{item._id.toString()}}">删除</button>
+								<a class="btn btn-primary btn-xs" href="/admin/edit?eid={{item._id.toString()}}">编辑</a>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<!-- 分页功能 -->
+			<div class="box-footer clearfix">
+				<ul class="pagination pagination-sm no-margin pull-right">
+					<li>
+						<a href="javascript:;" class="prev">«</a>
+					</li>
+					{% for item in num %}
+					<li>
+						<a href="javascript:;" class="my-page">{{item}}</a>
+					</li>
+					{% endfor %}
+					<li>
+						<a href="javascript:;" class="next">»</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+</div>
+<script>
+	var n = 0;
+	$('tbody').on('click','.btn-danger',function () {
+		// console.log(1);
+		var $otr = $(this).closest('tr');
+		var conf = confirm('确定删除吗?')//confirm方法会返回Boolean值，1为确定，0为取消
+		if (conf){
+			var id = $(this).attr('data-id');
+			$.ajax({
+				url: '/admin/del',
+				type:'get',
+				data:{
+					id:id,
+				},
+				success:function (result) {
+					if (result.code == 1) {
+						$otr.remove();
+					}
+				}
+			})
+		}
+	});
+	$('.my-page').click(function () {
+		n = $(this).html();
+		pageTo()
+	})
+	function pageTo() {
+		$.ajax({
+			url:'/admin/list/page',
+			type: 'get',
+			data:{
+				p:n
+			},
+			success:function (result) {
+				// console.log(result)
+				var str = '';
+				var len = result.length;
+				for (var i=0;i<len;i++){
+					str += `<tr>
+								<td>${result[i]._id.toString()}</td>
+								<td>${result[i].title}</td>
+								<td>${result[i].author}</td>
+								<td>${result[i].time}</td>
+								<td><img class="sm-img" src="${result[i].imgUrl}" alt=""></td>
+								<td>
+								<button class="btn btn-danger btn-xs" data-id="${result[i]._id.toString()}">删除</button>
+								<a class="btn btn-primary btn-xs" href="/admin/edit?eid=${result[i]._id.toString()}">编辑</a>
+								</td>
+							</tr>`
+				}
+				// console.log(str)
+				$('tbody').html(str)
+			}
+
+		})
+	}
+	$('.prev').click(function () {
+		n = n-1;
+		if(n<1){
+			alert('当前是第一页');
+			n=1;
+		}
+		pageTo()
+	})
+	$('.next').click(function () {
+		var max = $('.my-page').length
+		n=n+1;
+		if (n>max){
+			alert('当前是最后一页了');
+			n=max;
+		}
+		pageTo()
+	})
+</script>
+{% endblock %}

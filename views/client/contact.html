@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Blog Detail</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/public/client/css/bootstrap.min.css">
+
+    <!-- FontAwesome CSS -->
+    <link rel="stylesheet" href="/public/client/css/fontawesome-all.min.css">
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="/public/client/css/swiper.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/public/client/css/style.css">
+    <style>
+        .page-header .entry-title{
+            font-size: 50px;
+        }
+        .entry-title{
+            padding-top: 40px;
+        }
+        .media{
+            border-bottom: 1px solid #d8d8d8;
+            padding: 10px 0;
+        }
+        .media-object{
+            width: 80px;
+            height: 80px;
+            background: cornflowerblue;
+            text-align:center ;
+            line-height: 80px;
+            color: #FFF;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+            font-size: 30px;
+            margin-right: 15px;
+        }
+        .media-body{
+            color: #333;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+
+<body class="contact-page">
+
+<header class="site-header">
+    <div class="header-bar">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-10 col-lg-4">
+                    <h1 class="site-branding flex">
+                        <a href="#">Blog</a>
+                    </h1>
+                </div>
+
+                <div class="col-2 col-lg-8">
+                    <nav class="site-navigation">
+                        <div class="hamburger-menu d-lg-none">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div><!-- .hamburger-menu -->
+
+                    </nav><!-- .site-navigation -->
+                </div><!-- .col-12 -->
+            </div><!-- .row -->
+        </div><!-- container-fluid -->
+    </div><!-- header-bar -->
+</header><!-- .site-header -->
+
+<div class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="entry-header">
+                    <h2 class="entry-title">{{detailD.title}}</h2>
+                </div><!-- entry-header -->
+            </div><!-- col-12 -->
+        </div><!-- row -->
+    </div><!-- container -->
+</div><!-- page-header -->
+<div class="container">
+    <div class="main-content">
+        <div class="get-in-touch">
+            <div class="entry-header">
+                <div class="entry-title">
+                    <h2>{{detailD.title}}</h2>
+                    <p>{{detailD.author}}</p>
+                </div><!-- entry-title -->
+            </div><!-- entry-header -->
+            <div class="entry-content">
+                <p>{{detailD.words}}</p>
+            </div><!-- entry-content -->
+            <div id="msg-cont">
+                {% for item in msgD %}
+                <div class="media">
+                    <div class="media-left">
+                        <div class="media-object">{{item.name.charAt(0)}}</div>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">{{item.name}}</h4>
+                        {{item.msg}}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="contact-form">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <input type="text" placeholder="你的昵称（必填）" value="">
+                    </div><!-- col-4 -->
+
+                    <div class="col-12 col-md-6">
+                        <input type="email" placeholder="你的邮件（选填）" value="">
+                    </div>
+                    <div class="col-12">
+                        <textarea name="name" rows="8" cols="80" placeholder="请输入留言（必填）"></textarea>
+                    </div>
+
+                    <div class="col-12 submit flex justify-content-center">
+                        <input type="button" name="" value="提交" class="btn" data-id="{{detailD._id.toString()}}" data-tit="{{detailD.title}}">
+                    </div>
+
+                </div><!-- row -->
+            </div><!-- contact-form -->
+        </div><!-- newsletter-subscribe -->
+    </div><!-- main-content -->
+</div><!-- container -->
+
+<footer class="site-footer">
+    <div class="footer-cover-title flex justify-content-center align-items-center">
+        <h2>B l o g</h2>
+    </div><!-- .site-footer -->
+
+    <div class="footer-content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="entry-title">
+                        <a href="#">Blog</a>
+                    </div><!-- entry-title -->
+                    <div class="entry-mail">  </div><!-- .entry-mail -->
+                    <div class="footer-social">
+                        <ul class="flex justify-content-center align-items-center">
+                            <li><a href="#"><i class="fab fa-pinterest"></i></a></li>
+                            <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fab fa-dribbble"></i></a></li>
+                            <li><a href="#"><i class="fab fa-behance"></i></a></li>
+                            <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                        </ul>
+                    </div><!-- footer-social -->
+                </div><!-- col -->
+            </div><!-- row -->
+        </div><!-- container -->
+    </div><!-- footer-content-wrapper -->
+</footer><!-- site-footer -->
+
+<script type='text/javascript' src='/public/js/jquery-3.3.1.min.js'></script>
+<script>
+    $('.btn').click(function () {
+        var username=$('.contact-form input').eq(0).val();
+        var email=$('.contact-form input').eq(1).val();
+        var msg=$('.contact-form textarea').val();
+        var id = $(this).attr('data-id');
+        var tit = $(this).attr('data-tit');
+        console.log(tit)
+        if(username==''){
+            alert('请输入昵称');
+            return;
+        }
+        if(msg==''){
+            alert('请输入留言');
+            return;
+        }
+        $.ajax({
+            url:'/detail/leavemsg',
+            type:'post',
+            data:{
+                aid: id,
+                name:username,
+                email:email,
+                msg:msg,
+                tit:tit
+            },
+            success:function (result) {
+                if(result.code==1){
+                    var $div = $('<div class="media"></div>');
+                    var str = `<div class="media-left">
+                                        <div class="media-object">${username.charAt(0)}</div>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">${username}</h4>
+                                        ${msg}
+                                    </div>`
+                    $div.html(str);
+                    $div.appendTo($('#msg-cont'));
+                }
+            }
+        })
+    })
+</script>
+</body>
+
+</html>

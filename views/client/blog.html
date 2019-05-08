@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<style>
+    .blog-page .blog-list-page .load-more .btn{
+        color: #fff;
+        font-size: 20px;
+        letter-spacing: 1px;
+    }
+
+</style>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Blog</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/public/client/css/bootstrap.min.css">
+
+    <!-- FontAwesome CSS -->
+    <link rel="stylesheet" href="/public/client/css/fontawesome-all.min.css">
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="/public/client/css/swiper.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/public/client/css/style.css">
+    <link rel="stylesheet" href="/public/client/css/loading.css">
+    <style>
+        .page-header{
+            min-height: 400px;
+            position: relative;
+        }
+        .page-header .row{
+            position: absolute;
+            top: 35%;
+            left:10%;
+        }
+        .blog-list-page .single-blog-content{
+            display: block;
+        }
+    </style>
+</head>
+<body class="blog-page">
+
+    <div class="page-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="entry-header">
+                        <h2 class="entry-title">Blog</h2>
+                    </div><!-- entry-header -->
+                </div><!-- col-12 -->
+            </div><!-- row -->
+        </div><!-- container -->
+    </div><!-- page-header -->
+
+    <div class="main-content">
+        <div class="container">
+            <div class="last-news">
+                <div class="entry-header">
+                    <div class="entry-title">
+                        <h2>最近文章</h2>
+                    </div><!-- entry-title -->
+                </div>
+
+                <div class="row blog-list-page" id="cont-more">
+                    {% for item in blogData %}
+                    <div class="col-12 col-md-6 single-blog-content">
+                        <div class="blog-content">
+                            <figure class="featured-image">
+                                <a href="/detail?id={{item._id.toString()}}"> <img src="{{item.imgUrl}}" alt="fesival+celebration"> </a>
+                            </figure>
+
+                            <div class="box-link-date">
+                                <a href="">{{item.time}}</a>
+                            </div>
+
+                            <div class="entry-content">
+                                <div class="entry-header">
+                                    <h2>{{item.title}}</h2>
+                                </div><!-- entry-header -->
+
+                                <div class="entry-meta">
+                                    <span class="author-name"><a href="#">By {{item.author}}</a></span>
+                                    <span class="space">|</span>
+                                    <!--<span class="comments-count"><a href="#">3 comments</a></span>-->
+                                </div><!-- entry-meta -->
+
+                                <div class="entry-description">
+                                    <p>{{item.intro}}</p>
+                                </div><!-- entry-description -->
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="loading">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="row blog-list-page">
+                    <div class="col-12 load-more flex justify-content-center">
+                        <input type="button" name="" value="加载更多" class="btn" id="loadMore">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-cover-title flex justify-content-center align-items-center">
+            <h2>B l o g</h2>
+        </div><!-- .site-footer -->
+
+        <div class="footer-content-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="entry-title">
+                            <a href="#">Blog</a>
+                        </div><!-- entry-title -->
+
+                        <div class="footer-social">
+                            <ul class="flex justify-content-center align-items-center">
+                                <li><a href="#"><i class="fab fa-pinterest"></i></a></li>
+                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fab fa-dribbble"></i></a></li>
+                                <li><a href="#"><i class="fab fa-behance"></i></a></li>
+                                <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+<script type='text/javascript' src='/public/js/jquery-3.3.1.min.js'></script>
+<script type='text/javascript'>
+    $('#loadMore').click(function () {
+        $('.loading').show();
+        var n = $('.single-blog-content').length;
+        // console.log(n)
+        $.ajax({
+            url: '/client/more',
+            type:'post',
+            data:{
+                n:n,
+            },
+            timeout:3000,
+            success:function (result) {
+                $('.loading').hide();
+                // console.log(result)
+                var str = '';
+                var len = result.length;
+                if (len == n){
+                    alert('没有更多文章了~');
+                    return
+                }
+                for (var i=0;i<len;i++) {
+                    str += ` <div class="col-12 col-md-6 single-blog-content">
+                                    <div class="blog-content">
+                                        <figure class="featured-image">
+                                            <a href="/detail?id=${result[i]._id.toString()}"> <img src="${result[i].imgUrl}" alt="fesival+celebration"> </a>
+                                        </figure>
+                                        <div class="box-link-date">
+                                            <a href="">${result[i].time}</a>
+                                        </div>
+                                        <div class="entry-content">
+                                            <div class="entry-header">
+                                                <h2>${result[i].title}</h2>
+                                            </div>
+                                            <div class="entry-meta">
+                                                <span class="author-name"><a href="#">By  ${result[i].author}</a></span>
+                                                <span class="space">|</span>
+                                            </div>
+                                            <div class="entry-description">
+                                                <p>${result[i].intro}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`
+                }
+                $('#cont-more').html(str)
+            },
+            error:function (err) {
+                $('.loading').hide();
+                alert('网络开小差，再试一次吧~')
+            }
+        })
+    })
+</script>
+</html>
